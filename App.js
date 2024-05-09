@@ -12,9 +12,7 @@ export default function App() {
   });
 
   return (
-    <ClerkProvider
-      publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}
-    >
+    <ClerkProvider publishableKey={process.env.EXPO_CLERK_PUBLISHABLE_KEY}>
       <View style={styles.container}>
         <SignedIn>
           <Text>U bent ingelogd</Text>
