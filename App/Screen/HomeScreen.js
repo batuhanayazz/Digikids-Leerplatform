@@ -2,6 +2,7 @@ import { View, Text, Dimensions } from "react-native";
 import React from "react";
 import Header from "../Components/HomeScreen/Header";
 import Colors from "../Utils/Colors";
+import CourseList from "../Components/HomeScreen/CourseList";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
@@ -18,6 +19,9 @@ export default function HomeScreen() {
         }}
       >
         <Header />
+      </View>
+      <View>
+        <CourseList level="Basis" />
       </View>
     </View>
   );
