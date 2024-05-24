@@ -6,12 +6,9 @@ const client = new ApolloClient({
 });
 
 export const getCourseList = async (level) => {
-  const GET_COURSE_LIST =
-    gql`
+  const GET_COURSE_LIST = gql`
     query CourseList {
-      courses(where: { level: ` +
-    level +
-    ` }) {
+      courses(where: { level: ${level} }) {
         id
         name
         level
@@ -32,7 +29,7 @@ export const getCourseList = async (level) => {
     const { data } = await client.query({
       query: GET_COURSE_LIST,
     });
-    return data.courses;
+    return data;
   } catch (error) {
     console.error("Error fetching course list:", error);
     return [];
