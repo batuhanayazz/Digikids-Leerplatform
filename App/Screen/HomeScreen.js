@@ -20,8 +20,17 @@ export default function HomeScreen() {
       >
         <Header />
       </View>
-      <View>
-        <CourseList level="Basis" />
+      <View style={{ marginLeft: 20 }}>
+        <View style={{ marginTop: -80 }}>
+          <CourseList level="Basis" />
+        </View>
+        <View>
+          <CourseList level="Gemiddeld" />
+        </View>
+
+        <View>
+          <CourseList level="Gevorderd" />
+        </View>
       </View>
     </View>
   );

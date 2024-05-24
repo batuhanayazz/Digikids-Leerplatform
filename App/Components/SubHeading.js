@@ -9,7 +9,6 @@ export default function SubHeading({ text, color }) {
           fontFamily: "Poppins-Bold",
           fontSize: 24,
           color: color,
-          padding: 20,
         }}
       >
         {text}
