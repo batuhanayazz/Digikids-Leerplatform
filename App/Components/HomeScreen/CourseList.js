@@ -39,7 +39,11 @@ export default function CourseList({ level }) {
         showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => (
           <TouchableOpacity
-            onPress={() => navigation.navigate("CourseDetailScreen")}
+            onPress={() =>
+              navigation.navigate("CourseDetailScreen", {
+                course: item,
+              })
+            }
           >
             <CourseItem item={item} />
           </TouchableOpacity>

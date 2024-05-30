@@ -9,20 +9,21 @@ export const getCourseList = async (level) => {
   const GET_COURSE_LIST = gql`
     query CourseList {
       courses(where: { level: ${level} }) {
-        id
-        name
-        level
-        tags
-        time
-        author
-        banner {
-          url
-        }
-        chapters {
-          id
-        }
-      }
+    id
+    name
+    level
+    tags
+    time
+    author
+    banner {
+      url
     }
+    chapters {
+      id
+    }
+    authorName
+  }
+}
   `;
 
   try {
