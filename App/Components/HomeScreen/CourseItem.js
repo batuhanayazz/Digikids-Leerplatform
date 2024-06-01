@@ -1,7 +1,6 @@
 import { View, Text, Image } from "react-native";
 import React from "react";
-import { Feather } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import Colors from "../../Utils/Colors";
 
 export default function CourseItem({ item }) {
@@ -50,7 +49,7 @@ export default function CourseItem({ item }) {
                 marginTop: 10,
               }}
             >
-              <Feather name="book-open" size={18} color="black" />
+              <Ionicons name="book-outline" size={18} color={Colors.BLUE} />
               <Text
                 style={{
                   fontFamily: "Poppins-Regular",
@@ -69,7 +68,7 @@ export default function CourseItem({ item }) {
                 marginTop: 10,
               }}
             >
-              <Entypo name="back-in-time" size={18} color="black" />
+              <Ionicons name="time-outline" size={18} color={Colors.BLUE} />
               <Text
                 style={{
                   fontFamily: "Poppins-Regular",
