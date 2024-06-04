@@ -3,6 +3,8 @@ const Colors = {
   ORANGE: "#F68C11",
   PINK: "#ED166D",
   BLUE: "#1F1D42",
+  WHITE: "#fff",
+  GREY: "#9B9B9B",
 };
 
 /**

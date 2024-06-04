@@ -3,13 +3,14 @@ import React from "react";
 import Header from "../Components/HomeScreen/Header";
 import Colors from "../Utils/Colors";
 import CourseList from "../Components/HomeScreen/CourseList";
+import { ScrollView } from "react-native-gesture-handler";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
 
 export default function HomeScreen() {
   return (
-    <View>
+    <ScrollView>
       <View
         style={{
           backgroundColor: Colors.ORANGE,
@@ -32,6 +33,6 @@ export default function HomeScreen() {
           <CourseList level="Gevorderd" />
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }

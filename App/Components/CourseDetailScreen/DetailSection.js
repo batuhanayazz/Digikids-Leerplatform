@@ -9,7 +9,7 @@ export default function DetailSection({ course }) {
       style={{
         padding: 10,
         borderRadius: 15,
-        backgroundColor: "#fff",
+        backgroundColor: Colors.WHITE,
         marginRight: 15,
       }}
     >
@@ -62,7 +62,7 @@ export default function DetailSection({ course }) {
           <Text
             style={{
               fontFamily: "Poppins-Regular",
-              fontSize: 17,
+              fontSize: 12,
               color: Colors.BLUE,
               marginTop: 10,
             }}
