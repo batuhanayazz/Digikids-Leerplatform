@@ -1,9 +1,17 @@
-import { View, Text, Image, Dimensions, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  Dimensions,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import Colors from "../../Utils/Colors";
 import OptionItem from "./OptionItem";
+import { enrollCourse } from "../../Services";
 
-export default function DetailSection({ course }) {
+export default function DetailSection({ course, enrollCourse }) {
   return (
     <View
       style={{
@@ -69,6 +77,50 @@ export default function DetailSection({ course }) {
           >
             {course?.description?.markdown}
           </Text>
+        </View>
+        <View>
+          <Text
+            style={{
+              fontFamily: "Poppins-Medium",
+              fontSize: 17,
+              color: Colors.BLUE,
+              marginTop: 10,
+            }}
+          >
+            Tags
+          </Text>
+          <Text
+            style={{
+              fontFamily: "Poppins-Regular",
+              fontSize: 12,
+              color: Colors.BLUE,
+              marginTop: 10,
+            }}
+          >
+            {course?.tags}
+          </Text>
+        </View>
+        <View style={{ marginTop: 20 }}>
+          <TouchableOpacity
+            onPress={() => enrollCourse()}
+            style={{
+              padding: 20,
+              backgroundColor: Colors.PINK,
+              borderRadius: 15,
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "Poppins-Medium",
+                fontSize: 17,
+                color: Colors.WHITE,
+                marginTop: 10,
+                textAlign: "center",
+              }}
+            >
+              Begin Met Hoofdstukken
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
