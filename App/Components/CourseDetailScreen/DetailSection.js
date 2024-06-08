@@ -9,9 +9,12 @@ import {
 import React from "react";
 import Colors from "../../Utils/Colors";
 import OptionItem from "./OptionItem";
-import { enrollCourse } from "../../Services";
 
-export default function DetailSection({ course, enrollCourse }) {
+export default function DetailSection({
+  course,
+  enrollCourse,
+  userEnrolledCourse,
+}) {
   return (
     <View
       style={{
@@ -101,26 +104,28 @@ export default function DetailSection({ course, enrollCourse }) {
           </Text>
         </View>
         <View style={{ marginTop: 20 }}>
-          <TouchableOpacity
-            onPress={() => enrollCourse()}
-            style={{
-              padding: 20,
-              backgroundColor: Colors.PINK,
-              borderRadius: 15,
-            }}
-          >
-            <Text
+          {userEnrolledCourse?.length === 0 ? (
+            <TouchableOpacity
+              onPress={() => enrollCourse()}
               style={{
-                fontFamily: "Poppins-Medium",
-                fontSize: 17,
-                color: Colors.WHITE,
-                marginTop: 10,
-                textAlign: "center",
+                padding: 20,
+                backgroundColor: Colors.PINK,
+                borderRadius: 15,
               }}
             >
-              Begin Met Hoofdstukken
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={{
+                  fontFamily: "Poppins-Medium",
+                  fontSize: 17,
+                  color: Colors.WHITE,
+                  marginTop: 10,
+                  textAlign: "center",
+                }}
+              >
+                Begin Met Hoofdstukken
+              </Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
       </View>
     </View>

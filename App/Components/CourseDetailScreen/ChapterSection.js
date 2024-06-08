@@ -41,6 +41,7 @@ export default function ChapterSection({ chaptersList }) {
             marginRight: 15,
             marginTop: 10,
           }}
+          key={chapter?.id}
         >
           <View
             style={{

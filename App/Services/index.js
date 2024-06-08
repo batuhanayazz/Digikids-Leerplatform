@@ -17,6 +17,15 @@ const client = new ApolloClient({
   },
 });
 
+const resetApolloCache = async () => {
+  try {
+    await client.resetStore(); // Reset de cache en herlaad de gegevens
+    console.log("Apollo cache is gereset");
+  } catch (error) {
+    console.error("Error bij het resetten van de Apollo cache:", error);
+  }
+};
+
 export const getCourseList = async (level) => {
   const GET_COURSE_LIST = gql`
     query CourseList {
@@ -54,6 +63,7 @@ export const getCourseList = async (level) => {
   try {
     const { data } = await client.query({
       query: GET_COURSE_LIST,
+      fetchPolicy: "network-only",
     });
     return data;
   } catch (error) {
@@ -85,6 +95,7 @@ export const enrollCourse = async (courseId, userEmail) => {
       mutation: ENROLL_COURSE,
     });
     console.log("Mutatie response:", data);
+    await resetApolloCache();
     return data;
   } catch (error) {
     console.error(
@@ -117,7 +128,7 @@ export const getUserEnrolledCourse = async (courseId, userEmail) => {
     const { data } = await client.query({
       query: GET_USER_ENROLLED_COURSES,
     });
-    console.log("response:", data);
+    console.log("getUserEnrolledCourse response:", data);
     return data;
   } catch (error) {
     console.error("Error :", error.networkError || error);
