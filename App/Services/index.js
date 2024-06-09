@@ -48,9 +48,11 @@ export const getCourseList = async (level) => {
         heading
         description {
           markdown
+          html
         }
         output {
           markdown
+          html
         }
       }
       tile

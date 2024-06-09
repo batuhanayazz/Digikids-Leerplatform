@@ -15,6 +15,7 @@ export default function ProgressBar({ contentLength, contentindex }) {
         flexDirection: "row",
         justifyContent: "space-between",
         marginTop: 20,
+        padding: 15,
       }}
     >
       {arraySize.map((item, index) => (

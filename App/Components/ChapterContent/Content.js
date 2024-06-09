@@ -1,24 +1,75 @@
-import { View, Text, FlatList, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  Dimensions,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import React from "react";
 import ProgressBar from "./ProgressBar";
+import ContentItem from "./ContentItem";
+import Colors from "../../Utils/Colors";
 
 export default function Content({ content }) {
+  let contentRef;
+  const onNextBtnPress = (index) => {
+    contentRef?.scrollToIndex({ index: index + 1, animated: true });
+  };
   return (
-    <View style={{ padding: 20 }}>
+    <ScrollView>
       <ProgressBar contentLength={content?.length} contentindex={0} />
       <FlatList
         data={content}
         horizontal={true}
         pagingEnabled={true}
         showsHorizontalScrollIndicator={false}
+        ref={(ref) => (contentRef = ref)}
         renderItem={({ item, index }) => (
-          <View style={{ width: Dimensions.get("screen").width * 0.92 }}>
-            <Text style={{ fontSize: 20, fontWeight: "bold", marginTop: 15 }}>
+          <View style={{ width: Dimensions.get("screen").width, padding: 20 }}>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+                marginTop: 10,
+                marginBottom: 10,
+              }}
+            >
               {item.heading}
             </Text>
+            <ContentItem
+              description={item?.description?.html}
+              output={item?.output?.html}
+            />
+            <TouchableOpacity
+              onPress={() => onNextBtnPress(index)}
+              style={{
+                marginTop: 20,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  padding: 15,
+                  backgroundColor: Colors.ORANGE,
+                  borderRadius: 10,
+                  fontFamily: "Poppins-Bold",
+                  color: Colors.WHITE,
+                  fontSize: 14,
+                  textAlign: "center",
+                  width: 200,
+                  // position: "absolute",
+                  // bottom: 0,
+                }}
+              >
+                Volgende
+              </Text>
+            </TouchableOpacity>
           </View>
         )}
       />
-    </View>
+    </ScrollView>
   );
 }
