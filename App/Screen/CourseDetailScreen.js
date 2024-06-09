@@ -5,7 +5,7 @@ import {
   ScrollView,
   ToastAndroid,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { EvilIcons } from "@expo/vector-icons";
 import Colors from "../Utils/Colors";
@@ -13,23 +13,30 @@ import DetailSection from "../Components/CourseDetailScreen/DetailSection";
 import ChapterSection from "../Components/CourseDetailScreen/ChapterSection";
 import { enrollCourse, getUserEnrolledCourse } from "../Services";
 import { useUser } from "@clerk/clerk-expo";
+import { CompleteChapterContext } from "../Context/CompleteChapterContext";
 
 export default function CourseDetailScreen() {
   const navigation = useNavigation();
   const params = useRoute().params;
+  const { isChapterComplete, setIsChapterComplete } = useContext(
+    CompleteChapterContext
+  );
   const [userEnrolledCourse, setUserEnrolledCourse] = useState([]);
   const { user } = useUser();
   useEffect(() => {
-    console.log("Params", params.course);
+    // console.log("Params", params.course);
     if (user && params.course) {
       GetUserEnrolledCourse();
     }
   }, [params.course, user]);
 
+  useEffect(() => {
+    isChapterComplete && GetUserEnrolledCourse();
+  }, [isChapterComplete]);
+
   const UserEnrollCourse = async () => {
     enrollCourse(params.course.id, user.primaryEmailAddress.emailAddress).then(
       (resp) => {
-        //console.log("DENEME1 ", resp);
         if (resp) {
           ToastAndroid.show("Je kan nu beginnen", ToastAndroid.LONG);
           GetUserEnrolledCourse();
@@ -43,7 +50,6 @@ export default function CourseDetailScreen() {
       params.course.id,
       user.primaryEmailAddress.emailAddress
     ).then((resp) => {
-      console.log("DENEME ", resp);
       setUserEnrolledCourse(resp.userConrolledCourses);
     });
   };

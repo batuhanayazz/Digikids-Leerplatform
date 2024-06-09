@@ -131,9 +131,45 @@ export const getUserEnrolledCourse = async (courseId, userEmail) => {
       query: GET_USER_ENROLLED_COURSES,
     });
     console.log("getUserEnrolledCourse response:", data);
+    // await resetApolloCache();
     return data;
   } catch (error) {
     console.error("Error :", error.networkError || error);
+    return [];
+  }
+};
+
+export const markChapterAsCompleted = async (chapterId, recordId) => {
+  const MARK_CHAPTER_AS_COMPLETED = gql`
+    mutation {
+      updateUserConrolledCourse(
+        data: { completedChapter: { create: { data: { chapterId: "${chapterId}" } } } }
+        where: { id: "${recordId}" }
+      ) {
+        id
+      }
+      publishManyUserConrolledCoursesConnection {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+    }
+  `;
+
+  try {
+    const { data } = await client.mutate({
+      mutation: MARK_CHAPTER_AS_COMPLETED,
+    });
+    console.log("Mutatie response:", data);
+    await resetApolloCache();
+    return data;
+  } catch (error) {
+    console.error(
+      "Error enrolling user to course:",
+      error.networkError || error
+    );
     return [];
   }
 };

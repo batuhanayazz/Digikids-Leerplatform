@@ -1,23 +1,50 @@
-import { View, Text, TouchableOpacity, ToastAndroid } from "react-native";
-import React from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ToastAndroid,
+  StyleSheet,
+} from "react-native";
+import React, { useContext } from "react";
 import Colors from "../../Utils/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
+import { CompleteChapterContext } from "../../Context/CompleteChapterContext";
 
 export default function ChapterSection({ chaptersList, userEnrolledCourse }) {
+  const { isChapterComplete, setIsChapterComplete } = useContext(
+    CompleteChapterContext
+  );
+
   const navigation = useNavigation();
-  const OnChapterPress = (content) => {
+
+  const OnChapterPress = (chapter) => {
     if (userEnrolledCourse?.length == 0) {
       ToastAndroid.show("Je moet eerst inschrijven", ToastAndroid.LONG);
       return;
     } else {
-      // console.log("Chapter ", content);
-      //console.log("Chapter Length  ", content.length);
+      setIsChapterComplete(false);
       navigation.navigate("ChapterContentScreen", {
-        content: content,
+        content: chapter?.content,
+        chapterId: chapter?.id,
+        userCourseRecordId: userEnrolledCourse[0]?.id,
       });
     }
   };
+
+  const checkIsChapterCompleted = (chapterId) => {
+    console.log("chapterId", chapterId);
+    console.log("userEnrolledCourse", userEnrolledCourse[0]?.completedChapter);
+    if (userEnrolledCourse[0]?.completedChapter.length <= 0) {
+      return false;
+    }
+    const response = userEnrolledCourse[0]?.completedChapter.find(
+      (chapter) => chapter.chapterId == chapterId
+    );
+    console.log("response", response);
+    return response;
+  };
+
   return (
     chaptersList && (
       <View
@@ -29,6 +56,7 @@ export default function ChapterSection({ chaptersList, userEnrolledCourse }) {
           borderRadius: 15,
           marginTop: 20,
           marginRight: 15,
+          marginBottom: 30,
         }}
       >
         <Text
@@ -43,21 +71,13 @@ export default function ChapterSection({ chaptersList, userEnrolledCourse }) {
         </Text>
         {chaptersList?.map((chapter, index) => (
           <TouchableOpacity
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: 5,
-              backgroundColor: Colors.WHITE,
-              borderRadius: 15,
-              borderWidth: 1,
-              borderColor: Colors.GREY,
-              marginRight: 5,
-              marginTop: 10,
-            }}
+            style={[
+              checkIsChapterCompleted(chapter.id)
+                ? styles.completedChapter
+                : styles.inCompletedChapter,
+            ]}
             key={chapter?.id}
-            onPress={() => OnChapterPress(chapter.content, index)}
+            onPress={() => OnChapterPress(chapter, index)}
           >
             <View
               style={{
@@ -65,24 +85,32 @@ export default function ChapterSection({ chaptersList, userEnrolledCourse }) {
                 flexDirection: "row",
                 alignItems: "center",
                 gap: 10,
-                padding: 10,
+                padding: 5,
               }}
             >
+              {checkIsChapterCompleted(chapter.id) ? (
+                <Ionicons
+                  name="checkmark-circle"
+                  size={25}
+                  color={Colors.GREEN}
+                />
+              ) : (
+                <Text
+                  style={{
+                    fontFamily: "Poppins-Medium",
+                    fontSize: 27,
+                    color: Colors.GREY,
+                  }}
+                >
+                  {index + 1}
+                </Text>
+              )}
               <Text
-                style={{
-                  fontFamily: "Poppins-Medium",
-                  fontSize: 27,
-                  color: Colors.GREY,
-                }}
-              >
-                {index + 1}
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "Poppins-Regular",
-                  fontSize: 21,
-                  color: Colors.GREY,
-                }}
+                style={[
+                  checkIsChapterCompleted(chapter.id)
+                    ? styles.completedChapterText
+                    : styles.inCompletedChapterText,
+                ]}
               >
                 {chapter?.tile}
               </Text>
@@ -98,3 +126,44 @@ export default function ChapterSection({ chaptersList, userEnrolledCourse }) {
     )
   );
 }
+
+const styles = StyleSheet.create({
+  inCompletedChapter: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: Colors.WHITE,
+    borderRadius: 15,
+    padding: 5,
+    borderWidth: 1,
+    borderColor: Colors.GREY,
+    marginRight: 5,
+    marginTop: 10,
+  },
+  inCompletedChapterText: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 21,
+    color: Colors.GREY,
+  },
+  completedChapter: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 5,
+    color: Colors.WHITE,
+    backgroundColor: Colors.transparentGREEN10,
+    borderRadius: 15,
+    borderWidth: 2,
+    borderColor: Colors.GREEN,
+    marginRight: 5,
+    marginTop: 10,
+  },
+  completedChapterText: {
+    fontWeight: "bold",
+    fontFamily: "Poppins-Regular",
+    fontSize: 21,
+    color: Colors.GREEN,
+  },
+});

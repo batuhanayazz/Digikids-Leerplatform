@@ -28,4 +28,10 @@ const hexToRgba = (hex, alpha) => {
 // %40 transparant ORANGE
 Colors.transparentORANGE40 = hexToRgba(Colors.ORANGE, 0.4);
 
+// %40 transparant PINK
+Colors.transparentPINK40 = hexToRgba(Colors.PINK, 0.4);
+
+// %10 transparant GREEN
+Colors.transparentGREEN10 = hexToRgba(Colors.GREEN, 0.1);
+
 export default Colors;

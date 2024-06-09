@@ -5,8 +5,11 @@ import LoginScreen from "./App/Screen/LoginScreen";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
 import { NavigationContainer } from "@react-navigation/native";
 import TabNavigation from "./App/Navigations/TabNavigation";
+import { CompleteChapterContext } from "./App/Context/CompleteChapterContext";
+import { useState } from "react";
 
 export default function App() {
+  const [isChapterComplete, setIsChapterComplete] = useState(false);
   const [fontsLoaded, fontError] = useFonts({
     "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
     "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
@@ -17,16 +20,20 @@ export default function App() {
     <ClerkProvider
       publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}
     >
-      <View style={styles.container}>
-        <SignedIn>
-          <NavigationContainer>
-            <TabNavigation />
-          </NavigationContainer>
-        </SignedIn>
-        <SignedOut>
-          <LoginScreen />
-        </SignedOut>
-      </View>
+      <CompleteChapterContext.Provider
+        value={{ isChapterComplete, setIsChapterComplete }}
+      >
+        <View style={styles.container}>
+          <SignedIn>
+            <NavigationContainer>
+              <TabNavigation />
+            </NavigationContainer>
+          </SignedIn>
+          <SignedOut>
+            <LoginScreen />
+          </SignedOut>
+        </View>
+      </CompleteChapterContext.Provider>
     </ClerkProvider>
   );
 }
