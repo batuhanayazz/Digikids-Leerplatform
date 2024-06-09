@@ -73,7 +73,7 @@ export default function LoginScreen() {
             fontFamily: "Poppins-Medium",
           }}
         >
-          Educatie op Maat, DigiKids Staat paraat!
+          Educatie op maat, DigiKids staat paraat!
         </Text>
         <Text
           style={{

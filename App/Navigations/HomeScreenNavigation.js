@@ -6,6 +6,7 @@ import {
 } from "@react-navigation/stack";
 import HomeScreen from "../Screen/HomeScreen";
 import CourseDetailScreen from "../Screen/CourseDetailScreen";
+import ChapterContentScreen from "../Screen/ChapterContentScreen";
 import Colors from "../Utils/Colors";
 
 const Stack = createStackNavigator();
@@ -21,6 +22,10 @@ export default function HomeScreenNavigation() {
         name="CourseDetailScreen"
         component={CourseDetailScreen}
         options={{ cardStyle: { backgroundColor: Colors.transparentORANGE40 } }}
+      />
+      <Stack.Screen
+        name="ChapterContentScreen"
+        component={ChapterContentScreen}
       />
     </Stack.Navigator>
   );
