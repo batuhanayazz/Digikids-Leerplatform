@@ -10,15 +10,23 @@ import React from "react";
 import ProgressBar from "./ProgressBar";
 import ContentItem from "./ContentItem";
 import Colors from "../../Utils/Colors";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Content({ content }) {
   let contentRef;
+  const navigation = useNavigation();
+  const [activeIndex, setActiveIndex] = React.useState(0);
   const onNextBtnPress = (index) => {
+    if (content?.length <= index + 1) {
+      navigation.goBack();
+      return;
+    }
+    setActiveIndex(index + 1);
     contentRef?.scrollToIndex({ index: index + 1, animated: true });
   };
   return (
     <ScrollView>
-      <ProgressBar contentLength={content?.length} contentindex={0} />
+      <ProgressBar contentLength={content?.length} contentindex={activeIndex} />
       <FlatList
         data={content}
         horizontal={true}
@@ -64,7 +72,7 @@ export default function Content({ content }) {
                   // bottom: 0,
                 }}
               >
-                Volgende
+                {content?.length > index + 1 ? "Volgende" : "Klaar"}
               </Text>
             </TouchableOpacity>
           </View>
