@@ -5,7 +5,7 @@ import Colors from "../Utils/Colors";
 import CourseList from "../Components/HomeScreen/CourseList";
 import { ScrollView } from "react-native-gesture-handler";
 import { useAuth, useUser } from "@clerk/clerk-expo";
-import { createNewUser, getUserDetail } from "../Services";
+import { createNewUser, GetUserDetail } from "../Services";
 import { UserPointsContext } from "../Context/UserPointsContext";
 import { useContext, useEffect } from "react";
 
@@ -32,7 +32,7 @@ export default function HomeScreen() {
   };
 
   const GetUser = () => {
-    getUserDetail(user.primaryEmailAddress.emailAddress).then((resp) => {
+    GetUserDetail(user.primaryEmailAddress.emailAddress).then((resp) => {
       console.log("--", resp.userDetail?.point);
       setUserPoints(resp.userDetail?.point);
     });

@@ -213,7 +213,6 @@ export const createNewUser = async (userName, email, profileImageurl) => {
       mutation: CREATE_NEW_USER,
     });
     console.log("CREATE_NEW_USER-Succes:", data);
-    await resetApolloCache();
     return data;
   } catch (error) {
     console.error("CREATE_NEW_USER-Error", error.networkError || error);
@@ -221,7 +220,7 @@ export const createNewUser = async (userName, email, profileImageurl) => {
   }
 };
 
-export const getUserDetail = async (email) => {
+export const GetUserDetail = async (email) => {
   const GET_USER_DETAIL = gql`
     query {
       userDetail
@@ -243,7 +242,7 @@ export const getUserDetail = async (email) => {
   }
 };
 
-export const getAllUsers = async () => {
+export const GetAllUsers = async () => {
   const GET_ALL_USERS = gql`
     query {
       userDetails(orderBy: point_DESC) {
