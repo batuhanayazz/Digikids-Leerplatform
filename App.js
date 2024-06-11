@@ -6,10 +6,15 @@ import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
 import { NavigationContainer } from "@react-navigation/native";
 import TabNavigation from "./App/Navigations/TabNavigation";
 import { CompleteChapterContext } from "./App/Context/CompleteChapterContext";
+
 import { useState } from "react";
+import { UserPointsContext } from "./App/Context/UserPointsContext";
+
+//Need to add secure for login
 
 export default function App() {
   const [isChapterComplete, setIsChapterComplete] = useState(false);
+  const [userPoints, setUserPoints] = useState();
   const [fontsLoaded, fontError] = useFonts({
     "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
     "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
@@ -20,20 +25,22 @@ export default function App() {
     <ClerkProvider
       publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}
     >
-      <CompleteChapterContext.Provider
-        value={{ isChapterComplete, setIsChapterComplete }}
-      >
-        <View style={styles.container}>
-          <SignedIn>
-            <NavigationContainer>
-              <TabNavigation />
-            </NavigationContainer>
-          </SignedIn>
-          <SignedOut>
-            <LoginScreen />
-          </SignedOut>
-        </View>
-      </CompleteChapterContext.Provider>
+      <UserPointsContext.Provider value={{ userPoints, setUserPoints }}>
+        <CompleteChapterContext.Provider
+          value={{ isChapterComplete, setIsChapterComplete }}
+        >
+          <View style={styles.container}>
+            <SignedIn>
+              <NavigationContainer>
+                <TabNavigation />
+              </NavigationContainer>
+            </SignedIn>
+            <SignedOut>
+              <LoginScreen />
+            </SignedOut>
+          </View>
+        </CompleteChapterContext.Provider>
+      </UserPointsContext.Provider>
     </ClerkProvider>
   );
 }

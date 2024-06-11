@@ -139,7 +139,12 @@ export const getUserEnrolledCourse = async (courseId, userEmail) => {
   }
 };
 
-export const markChapterAsCompleted = async (chapterId, recordId) => {
+export const markChapterAsCompleted = async (
+  chapterId,
+  recordId,
+  userEmail,
+  points
+) => {
   const MARK_CHAPTER_AS_COMPLETED = gql`
     mutation {
       updateUserConrolledCourse(
@@ -155,6 +160,13 @@ export const markChapterAsCompleted = async (chapterId, recordId) => {
           }
         }
       }
+       updateUserDetail(where: {email: "${userEmail}"}, 
+      data: {point: ${points}}) {
+        point
+      }
+      publishUserDetail(where: {email: "${userEmail}"}) {
+        id
+      } 
     }
   `;
 
@@ -179,10 +191,14 @@ export const createNewUser = async (userName, email, profileImageurl) => {
     mutation {
       upsertUserDetail(
         upsert: {
-          create: { email: "${email}", point: 10, profileImage: "${profileImageurl}", userName: "${userName}" }
-          update: { email: "${email}" }
+          create: { email: "${email}", 
+          point: 10, 
+          profileImage: "${profileImageurl}", 
+          userName: "${userName}" }
+          update: { email: "${email}",
+          profileImage: "${profileImageurl}",userName: "${userName}" }
         }
-        where: { email: "${email}" }
+        where: { email: "${email}"}
       ) {
         id
       }
@@ -201,6 +217,51 @@ export const createNewUser = async (userName, email, profileImageurl) => {
     return data;
   } catch (error) {
     console.error("CREATE_NEW_USER-Error", error.networkError || error);
+    return [];
+  }
+};
+
+export const getUserDetail = async (email) => {
+  const GET_USER_DETAIL = gql`
+    query {
+      userDetail
+      (where: { email: "${email}" }){
+        point
+      }
+    }
+  `;
+
+  try {
+    const { data } = await client.query({
+      query: GET_USER_DETAIL,
+    });
+    console.log("GET_USER_DETAIL-Succes:", data);
+    return data;
+  } catch (error) {
+    console.error("GET_USER_DETAIL-Error :", error.networkError || error);
+    return [];
+  }
+};
+
+export const getAllUsers = async () => {
+  const GET_ALL_USERS = gql`
+    query {
+      userDetails(orderBy: point_DESC) {
+        id
+        profileImage
+        userName
+        point
+      }
+    }
+  `;
+  try {
+    const { data } = await client.query({
+      query: GET_ALL_USERS,
+    });
+    console.log("GET_ALL_USERS-Succes:", data);
+    return data;
+  } catch (error) {
+    console.error("GET_ALL_USERS-Error :", error.networkError || error);
     return [];
   }
 };

@@ -4,11 +4,39 @@ import Header from "../Components/HomeScreen/Header";
 import Colors from "../Utils/Colors";
 import CourseList from "../Components/HomeScreen/CourseList";
 import { ScrollView } from "react-native-gesture-handler";
+import { useAuth, useUser } from "@clerk/clerk-expo";
+import { createNewUser, getUserDetail } from "../Services";
+import { UserPointsContext } from "../Context/UserPointsContext";
+import { useContext, useEffect } from "react";
 
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
 
 export default function HomeScreen() {
+  const { isLoaded, signOut } = useAuth();
+  const { user } = useUser();
+  const { userPoints, setUserPoints } = useContext(UserPointsContext);
+  useEffect(() => {
+    user && createUser();
+  }, [user]);
+  const createUser = () => {
+    if (user) {
+      createNewUser(
+        user.fullName,
+        user.primaryEmailAddress.emailAddress,
+        user.imageUrl
+      ).then((resp) => {
+        if (resp) GetUser();
+      });
+    }
+  };
+
+  const GetUser = () => {
+    getUserDetail(user.primaryEmailAddress.emailAddress).then((resp) => {
+      console.log("--", resp.userDetail?.point);
+      setUserPoints(resp.userDetail?.point);
+    });
+  };
   return (
     <ScrollView>
       <View
@@ -19,7 +47,7 @@ export default function HomeScreen() {
           padding: 20,
         }}
       >
-        <Header />
+        <Header userPoints={userPoints} />
       </View>
       <View style={{ marginLeft: 20 }}>
         <View style={{ marginTop: -80 }}>
