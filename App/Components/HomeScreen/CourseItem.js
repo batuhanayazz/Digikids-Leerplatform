@@ -2,82 +2,62 @@ import { View, Text, Image } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../../Utils/Colors";
+import CourseProgressBar from "./CourseProgressBar";
 
-export default function CourseItem({ item }) {
+export default function CourseItem({ item, completedChapter }) {
   return (
-    <View>
-      <View
+    <View
+      style={{
+        padding: 10,
+        backgroundColor: "#fff",
+        marginRight: 15,
+        borderRadius: 15,
+      }}
+    >
+      <Image
+        source={{ uri: item?.banner.url }}
         style={{
-          padding: 10,
-          backgroundColor: "#fff",
-          marginRight: 15,
+          width: 210,
+          height: 120,
+          resizeMode: "stretch",
           borderRadius: 15,
         }}
-      >
-        <Image
-          source={{ uri: item?.banner.url }}
+      />
+      <View style={{ padding: 7 }}>
+        <Text
           style={{
-            width: 210,
-            height: 120,
-            resizeMode: "stretch",
-            borderRadius: 15,
+            fontFamily: "Poppins-Medium",
+            fontSize: 17,
+            color: Colors.BLUE,
           }}
-        />
-        <View style={{ padding: 7 }}>
-          <Text
-            style={{
-              fontFamily: "Poppins-Medium",
-              fontSize: 17,
-              color: Colors.BLUE,
-            }}
-          >
-            {item?.name}
-          </Text>
+        >
+          {item?.name}
+        </Text>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
           <View
             style={{
               display: "flex",
               flexDirection: "row",
-              justifyContent: "space-between",
+              alignItems: "center",
+              gap: 5,
+              marginTop: 10,
             }}
           >
-            <View
+            <Ionicons name="book-outline" size={18} color={Colors.BLUE} />
+            <Text
               style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 5,
-                marginTop: 10,
+                fontFamily: "Poppins-Regular",
+                color: Colors.BLUE,
               }}
             >
-              <Ionicons name="book-outline" size={18} color={Colors.BLUE} />
-              <Text
-                style={{
-                  fontFamily: "Poppins-Regular",
-                  color: Colors.BLUE,
-                }}
-              >
-                {item?.chapters?.length} Hoofdstuk
-              </Text>
-            </View>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 5,
-                marginTop: 10,
-              }}
-            >
-              <Ionicons name="time-outline" size={18} color={Colors.BLUE} />
-              <Text
-                style={{
-                  fontFamily: "Poppins-Regular",
-                  color: Colors.BLUE,
-                }}
-              >
-                {item?.time}u
-              </Text>
-            </View>
+              {item?.chapters?.length} Hoofdstuk
+            </Text>
           </View>
           <View
             style={{
@@ -88,17 +68,42 @@ export default function CourseItem({ item }) {
               marginTop: 10,
             }}
           >
+            <Ionicons name="time-outline" size={18} color={Colors.BLUE} />
             <Text
               style={{
                 fontFamily: "Poppins-Regular",
-                color: Colors.PINK,
+                color: Colors.BLUE,
               }}
             >
-              {item?.tags}
+              {item?.time}u
             </Text>
           </View>
         </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 5,
+            marginTop: 10,
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: "Poppins-Regular",
+              color: Colors.PINK,
+            }}
+          >
+            {item?.tags}
+          </Text>
+        </View>
       </View>
+      {completedChapter != undefined ? (
+        <CourseProgressBar
+          totalChapter={item?.chapters?.length}
+          completedChapter={completedChapter}
+        />
+      ) : null}
     </View>
   );
 }

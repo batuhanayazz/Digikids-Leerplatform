@@ -23,6 +23,7 @@ export default function CourseDetailScreen() {
   );
   const [userEnrolledCourse, setUserEnrolledCourse] = useState([]);
   const { user } = useUser();
+
   useEffect(() => {
     // console.log("Params", params.course);
     if (user && params.course) {

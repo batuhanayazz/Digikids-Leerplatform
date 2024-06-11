@@ -15,7 +15,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 var width = Dimensions.get("window").width; //full width
 var height = Dimensions.get("window").height; //full height
 
-export default function Header() {
+export default function Header({ userPoints }) {
   const { isLoaded, isSignedIn, user } = useUser();
   return (
     isLoaded && (
@@ -37,7 +37,7 @@ export default function Header() {
           </View>
           <View style={styles.rowStyle}>
             <Image source={Coin} style={{ width: 35, height: 35 }} />
-            <Text style={styles.textBlueMedium}>999999</Text>
+            <Text style={styles.textBlueMedium}>{userPoints}</Text>
           </View>
         </View>
         <View

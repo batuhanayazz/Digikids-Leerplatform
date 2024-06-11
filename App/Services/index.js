@@ -1,4 +1,5 @@
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+import { ApolloClient, InMemoryCache, gql, HttpLink } from "@apollo/client";
+import { RetryLink } from "@apollo/client/link/retry";
 
 /**
  * Creates an ApolloClient instance with the provided configuration.
@@ -9,6 +10,7 @@ import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
  * @param {object} headers - The headers to include in the GraphQL requests.
  * @returns {ApolloClient} - The configured ApolloClient instance.
  */
+
 const client = new ApolloClient({
   uri: "https://api-eu-central-1-shared-euc1-02.hygraph.com/v2/clw7qe3n801p307w13cjg99ku/master",
   cache: new InMemoryCache(),
@@ -16,7 +18,7 @@ const client = new ApolloClient({
     Authorization: `eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImdjbXMtbWFpbi1wcm9kdWN0aW9uIn0.eyJ2ZXJzaW9uIjozLCJpYXQiOjE3MTc4MzE0MDYsImF1ZCI6WyJodHRwczovL2FwaS1ldS1jZW50cmFsLTEtc2hhcmVkLWV1YzEtMDIuaHlncmFwaC5jb20vdjIvY2x3N3FlM244MDFwMzA3dzEzY2pnOTlrdS9tYXN0ZXIiLCJtYW5hZ2VtZW50LW5leHQuZ3JhcGhjbXMuY29tIl0sImlzcyI6Imh0dHBzOi8vbWFuYWdlbWVudC1ldS1jZW50cmFsLTEtc2hhcmVkLWV1YzEtMDIuaHlncmFwaC5jb20vIiwic3ViIjoiNTU2YjBhMDctZTBhNi00MjIxLTgxODQtZmM2NGZjMDM3YmFiIiwianRpIjoiY2x4NXNnc2ZxMGliaDA2dzJkOGU5NHBociJ9.UrpuEi4357gNRv23pE2uMg0wQfraeQE6j6zJNKSV_tU8fkWFCsPkPBGUqRhNAi1BwgvI4yltcZ_RGvLEAP_oNl0az2WwfqXwaxugs9x9mybBeIXhL_f_asaCfkCIiabyYgAcJJGZjOpv9X22KvOaFKzzBUOGPAEustSf_EU_Fwh847Ze9NOMxfTGOtoiBqtqZDgvTDIp2dclYqvmoYPJsEw-rRUKX-Auz72a-5TR2D2nnB9Ew103u7JVMPg9A7TSCfTAZ_5if36LL3p7ByawKIBPYN0XmlPr4M2pON7kTAja39LIZQBBx3Dr1sd19oQUkLbj1plyqK7Th3xJDRZYVIli4SRDLk7zSeNyFDyMduqxDzuuwtXBFLI8mmduREjakmS-irmu7jxxpSK1JBRXHqiZToWA0nZLo3fh02ocHPs6okUaM5ewIzBnmVQCm5iiPTgiRf4SEVnrh5d2GFmBRPrqjmxvHzQv6U97RwXMRLa7sDsGCbZyDnRvTGUWkOsaWs627Wm7hXittrcrGyaX5Bo6BsMeTzXpnRlmYE3IV-2EgjD6wrsnSrlP6YnUBFxjD6ku32xWrwX-Jg6eYodN1O9R5vVjFNbSvuVZWtJ928Iiv59JIdM6A-d1_O0upZgyAG7p7VER_R8XIufQdKek7Ugmo6eKpej2g61TCbAoFU0`,
   },
 });
-
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const resetApolloCache = async () => {
   try {
     await client.resetStore(); // Reset de cache en herlaad de gegevens
@@ -27,6 +29,7 @@ const resetApolloCache = async () => {
 };
 
 export const getCourseList = async (level) => {
+  await delay(1000);
   const GET_COURSE_LIST = gql`
     query CourseList {
       courses(where: { level: ${level} }) {
@@ -75,6 +78,7 @@ export const getCourseList = async (level) => {
 };
 
 export const enrollCourse = async (courseId, userEmail) => {
+  await delay(1000);
   const ENROLL_COURSE = gql`
     mutation {
       createUserConrolledCourse(
@@ -97,7 +101,8 @@ export const enrollCourse = async (courseId, userEmail) => {
       mutation: ENROLL_COURSE,
     });
     console.log("Mutatie response:", data);
-    await resetApolloCache();
+    //await resetApolloCache();
+    //enrollCourse();
     return data;
   } catch (error) {
     console.error(
@@ -109,6 +114,7 @@ export const enrollCourse = async (courseId, userEmail) => {
 };
 
 export const getUserEnrolledCourse = async (courseId, userEmail) => {
+  await delay(1000);
   const GET_USER_ENROLLED_COURSES = gql`
     query GetUserEnrolledCourse {
       userConrolledCourses(
@@ -131,7 +137,7 @@ export const getUserEnrolledCourse = async (courseId, userEmail) => {
       query: GET_USER_ENROLLED_COURSES,
     });
     console.log("getUserEnrolledCourse response:", data);
-    // await resetApolloCache();
+    await resetApolloCache();
     return data;
   } catch (error) {
     console.error("Error :", error.networkError || error);
@@ -145,6 +151,7 @@ export const markChapterAsCompleted = async (
   userEmail,
   points
 ) => {
+  await delay(1000);
   const MARK_CHAPTER_AS_COMPLETED = gql`
     mutation {
       updateUserConrolledCourse(
@@ -174,12 +181,11 @@ export const markChapterAsCompleted = async (
     const { data } = await client.mutate({
       mutation: MARK_CHAPTER_AS_COMPLETED,
     });
-    console.log("Mutatie response:", data);
-    await resetApolloCache();
+    console.log("MARK_CHAPTER_AS_COMPLETED-Succes: ", data);
     return data;
   } catch (error) {
     console.error(
-      "Error enrolling user to course:",
+      "MARK_CHAPTER_AS_COMPLETED-Error",
       error.networkError || error
     );
     return [];
@@ -187,6 +193,7 @@ export const markChapterAsCompleted = async (
 };
 
 export const createNewUser = async (userName, email, profileImageurl) => {
+  await delay(1000);
   const CREATE_NEW_USER = gql`
     mutation {
       upsertUserDetail(
@@ -221,6 +228,8 @@ export const createNewUser = async (userName, email, profileImageurl) => {
 };
 
 export const GetUserDetail = async (email) => {
+  await delay(1000);
+  await createNewUser();
   const GET_USER_DETAIL = gql`
     query {
       userDetail
@@ -243,6 +252,7 @@ export const GetUserDetail = async (email) => {
 };
 
 export const GetAllUsers = async () => {
+  await delay(1000);
   const GET_ALL_USERS = gql`
     query {
       userDetails(orderBy: point_DESC) {
@@ -261,6 +271,61 @@ export const GetAllUsers = async () => {
     return data;
   } catch (error) {
     console.error("GET_ALL_USERS-Error :", error.networkError || error);
+    return [];
+  }
+};
+
+export const GetAllProgressCourse = async (userEmail) => {
+  await delay(2000);
+  const GET_ALL_PROGRESS_COURSE = gql`
+    query {
+      userConrolledCourses(where: { userEmail: "${userEmail}" }) {
+        completedChapter {
+          chapterId
+        }
+        course {
+          banner {
+            url
+          }
+          chapters(where: {}) {
+            id
+            tile
+            content {
+              heading
+              description {
+                markdown
+                html
+              }
+              output {
+                markdown
+                html
+              }
+            }
+          }
+          description {
+            markdown
+          }
+          id
+          level
+          name
+          time
+        }
+      }
+    }
+  `;
+
+  try {
+    const { data } = await client.query({
+      query: GET_ALL_PROGRESS_COURSE,
+    });
+    console.log("GET_ALL_PROGRESS_COURSE-Succes: ", data);
+    return data;
+  } catch (error) {
+    console.error(
+      "GET_ALL_PROGRESS_COURSE-Error :",
+      error.networkError || error
+    );
+
     return [];
   }
 };
