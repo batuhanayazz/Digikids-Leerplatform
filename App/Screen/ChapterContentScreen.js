@@ -1,4 +1,4 @@
-import { View, Text, ToastAndroid } from "react-native";
+import { View, Text, ToastAndroid, ScrollView } from "react-native";
 import React, { useContext, useEffect } from "react";
 import Content from "../Components/ChapterContent/Content";
 import { useRoute } from "@react-navigation/native";
@@ -29,12 +29,12 @@ export default function ChapterContentScreen() {
   };
   return (
     param.content && (
-      <View>
+      <ScrollView>
         <Content
           content={param.content}
           onChapterFinish={() => onChapterFinish()}
         />
-      </View>
+      </ScrollView>
     )
   );
 }

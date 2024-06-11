@@ -52,7 +52,7 @@ export default function Header() {
           }}
         >
           <TextInput
-            placeholder="Zoek Cursussen"
+            placeholder="Zoek Cursussen   "
             style={[{}, styles.textBlueRegular]}
           />
           <Ionicons name="search-circle" size={50} color={Colors.GREEN} />

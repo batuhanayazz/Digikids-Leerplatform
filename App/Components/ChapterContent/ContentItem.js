@@ -22,14 +22,13 @@ export default function ContentItem({ description, output }) {
   return (
     description && (
       <View>
-        {/* <Text>{description}</Text> */}
         <RenderHtml
           contentWidth={width}
           source={descriptionSource}
           tagsStyles={tagsStyles}
         />
 
-        {output !== null ? (
+        {output ? (
           <TouchableOpacity
             onPress={() => setIsRun(true)}
             style={{

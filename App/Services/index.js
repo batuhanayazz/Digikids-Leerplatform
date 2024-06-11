@@ -173,3 +173,34 @@ export const markChapterAsCompleted = async (chapterId, recordId) => {
     return [];
   }
 };
+
+export const createNewUser = async (userName, email, profileImageurl) => {
+  const CREATE_NEW_USER = gql`
+    mutation {
+      upsertUserDetail(
+        upsert: {
+          create: { email: "${email}", point: 10, profileImage: "${profileImageurl}", userName: "${userName}" }
+          update: { email: "${email}" }
+        }
+        where: { email: "${email}" }
+      ) {
+        id
+      }
+      publishUserDetail(where: { email: "${email}" }) {
+        id
+      }
+    }
+  `;
+
+  try {
+    const { data } = await client.mutate({
+      mutation: CREATE_NEW_USER,
+    });
+    console.log("CREATE_NEW_USER-Succes:", data);
+    await resetApolloCache();
+    return data;
+  } catch (error) {
+    console.error("CREATE_NEW_USER-Error", error.networkError || error);
+    return [];
+  }
+};
