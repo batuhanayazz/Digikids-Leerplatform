@@ -4,27 +4,50 @@ import {
   FlatList,
   Dimensions,
   TouchableOpacity,
-  ScrollView,
+  Alert,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import ProgressBar from "./ProgressBar";
 import ContentItem from "./ContentItem";
 import Colors from "../../Utils/Colors";
+import YouTubeVideoPlayer from "react-native-youtube-iframe";
 
 export default function Content({ content, onChapterFinish }) {
   // Gebruik useRef voor de FlatList referentie
   const contentRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // Log de huidige waarde van activeIndex om te controleren
+  const [playing, setPlaying] = useState(false);
+  const [sound, setSound] = useState(null); // Initialiseer de sound state
+
+  const onStateChange = useCallback((state) => {
+    if (state === "ended") {
+      setPlaying(false);
+      Alert.alert("video has finished playing");
+    }
+  }, []);
+
+  const togglePlaying = useCallback(() => {
+    setPlaying((prev) => !prev);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (sound) {
+        console.log("Unloading sound on component unmount");
+        sound.unloadAsync();
+      }
+    };
+  }, [sound]);
+
   useEffect(() => {
     //console.log("Current activeIndex:", activeIndex);
   }, [activeIndex]);
 
-  // Log de props die naar de ProgressBar worden gestuurd
   useEffect(() => {
     //console.log("ProgressBar Props - contentLength:", content?.length);
     //console.log("ProgressBar Props - contentIndex:", activeIndex);
+    console;
   }, [content, activeIndex]);
 
   const onNextBtnPress = (index) => {
@@ -69,10 +92,58 @@ export default function Content({ content, onChapterFinish }) {
             >
               {item.heading}
             </Text>
-            <ContentItem
-              description={item?.description?.html}
-              output={item?.output?.html}
-            />
+
+            {item?.videoUrl && (
+              <>
+                {/* YouTube video player */}
+                <YouTubeVideoPlayer
+                  videoId={item?.videoUrl}
+                  height={300}
+                  play={playing}
+                  onChangeState={onStateChange}
+                />
+                <TouchableOpacity
+                  onPress={togglePlaying}
+                  style={{
+                    padding: 15,
+                    backgroundColor: Colors.PINK,
+                    borderRadius: 10,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "100%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "Poppins-Bold",
+                      color: Colors.WHITE,
+                      fontSize: 14,
+                      textAlign: "center",
+                    }}
+                  >
+                    {playing ? "Stoppen" : "Spelen"}
+                  </Text>
+                </TouchableOpacity>
+              </>
+            )}
+
+            {item?.soundClip?.url && (
+              <>
+                <ContentItem
+                  description={item?.description?.html}
+                  output={item?.output?.html}
+                  soundClip={item?.soundClip?.url}
+                />
+              </>
+            )}
+
+            {!item?.videoUrl && !item?.soundClip?.url && (
+              <ContentItem
+                description={item?.description?.html}
+                output={item?.output?.html}
+              />
+            )}
+
             <View
               style={{
                 flexDirection: "row",

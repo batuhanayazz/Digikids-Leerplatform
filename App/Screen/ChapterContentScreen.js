@@ -17,8 +17,8 @@ export default function ChapterContentScreen() {
     CompleteChapterContext
   );
   useEffect(() => {
-    console.log("ChapterId", param.chapterId);
-    console.log("RecordId", param.userCourseRecordId);
+    // console.log("ChapterId", param.chapterId);
+    // console.log("RecordId", param.userCourseRecordId);
   }, [param]);
   const onChapterFinish = () => {
     const totalPoints = Number(userPoints) + param.content?.length * 10;

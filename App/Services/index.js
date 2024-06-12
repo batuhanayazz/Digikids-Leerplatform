@@ -57,9 +57,14 @@ export const getCourseList = async (level) => {
           markdown
           html
         }
+        videoUrl
+        soundClip {
+          id
+          url
+        }
       }
-      tile
       id
+      tile
     }
   }
 }
